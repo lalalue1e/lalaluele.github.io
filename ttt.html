@@ -1,0 +1,49 @@
+<!-- detection/templates/detection/map.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>YOLOv5与高德地图集成</title>
+    <!-- 引入高德地图API -->
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=acfe1836bc286b75f333692baa566003"></script>
+</head>
+<body>
+    <div id="container" style="width: 1849px; height: 1000px;"></div>
+    <script type="text/javascript">
+        var map = new AMap.Map('container', {
+            resizeEnable: true,
+            center: [116.397428, 39.90923], // 初始中心点
+            zoom: 13
+        });
+
+        // 获取用户当前位置并在地图上显示
+        function getUserLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var latitude = position.coords.latitude;
+                    var longitude = position.coords.longitude;
+                    // 更新地图中心点到用户位置
+                    map.setCenter([longitude, latitude]);
+                    // 在用户位置添加标记
+                    var marker = new AMap.Marker({
+                        position: new AMap.LngLat(longitude, latitude),
+                        map: map
+                    });
+                    // 设置标记的标签内容
+                    marker.setLabel({
+                        content: "您的位置",
+                        offset: new AMap.Pixel(20, -10)
+                    });
+                }, function(error) {
+                    console.error("Geolocation error: ", error);
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        // 当地图加载完成后获取用户位置
+        AMap.event.addListenerOnce(map, 'complete', getUserLocation);
+    </script>
+</body>
+</html>
