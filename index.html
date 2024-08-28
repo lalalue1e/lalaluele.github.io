@@ -5,10 +5,10 @@
     <meta charset="utf-8">
     <title>YOLOv5与高德地图集成</title>
     <!-- 引入高德地图API -->
-    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=acfe1836bc286b75f333692baa566003"></script>
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=你的高德API Key"></script>
 </head>
 <body>
-    <div id="container" style="width: 1849px; height: 1000px;"></div>
+    <div id="container" style="width: 600px; height: 400px;"></div>
     <script type="text/javascript">
         var map = new AMap.Map('container', {
             resizeEnable: true,
@@ -19,6 +19,11 @@
         // 获取用户当前位置并在地图上显示
         function getUserLocation() {
             if (navigator.geolocation) {
+                var options = {
+                    enableHighAccuracy: true, // 启用高精度定位
+                    timeout: 5000, // 超过5000毫秒（5秒）则放弃定位请求
+                    maximumAge: 0 // 定位结果的最大年龄，0表示始终获取最新的定位结果
+                };
                 navigator.geolocation.getCurrentPosition(function(position) {
                     var latitude = position.coords.latitude;
                     var longitude = position.coords.longitude;
@@ -36,7 +41,7 @@
                     });
                 }, function(error) {
                     console.error("Geolocation error: ", error);
-                });
+                }, options);
             } else {
                 alert("Geolocation is not supported by this browser.");
             }
