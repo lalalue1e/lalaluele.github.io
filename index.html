@@ -6,7 +6,7 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
     <title>周边美食</title>
     <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css" />
-   
+
     <style>
         html,
         body,
@@ -46,8 +46,13 @@
     <p id='result'></p>
 </div>
 <div id="panel"></div>
-<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.10&key=32107bd7528a12c4c1be063630e58033&&plugin=AMap.Scale,AMap.OverView,AMap.ToolBar"></script>
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.10&key=您申请的key值&&plugin=AMap.Scale,AMap.OverView,AMap.ToolBar"></script>
 <script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
+<script type="text/javascript">
+    window._AMapSecurityConfig = {
+      securityJsCode: "9e81e142851348cd60d823d586494290",
+    }
+</script>
 <script type="text/javascript">
     //初始化地图对象，加载地图
     var map = new AMap.Map("container", {
@@ -63,7 +68,7 @@
             buttonPosition:'RB',    //定位按钮的停靠位置
             buttonOffset: new AMap.Pixel(0, 0),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
             zoomToAccuracy: true,   //定位成功后是否自动调整地图视野到定位点
- 
+
         });
         map.addControl(geolocation);
         geolocation.getCurrentPosition(function(status,result){
@@ -102,7 +107,7 @@
 	    icon: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
 	    position: [116.405467, 39.907761],
 	});
-    var placeSearch = new AMap.PlaceSearch({ 
+    var placeSearch = new AMap.PlaceSearch({
         type: '餐饮服务', // 兴趣点类别
         pageSize: 5, // 单页显示结果条数
         pageIndex: 1, // 页码
