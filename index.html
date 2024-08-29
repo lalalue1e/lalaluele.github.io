@@ -4,64 +4,39 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
-    <title>周边美食</title>
-    <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css" />
-
+    <title>浏览器精确定位</title>
+      <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css" />
     <style>
-        html,
-        body,
-        #container {
-          width: 100%;
-          height: 400px;
-        }
-        #panel {
-            position: relative;
-            background-color: white;
-            overflow-y: auto;
-            width: 90%;
-            margin:0 5%;
-            box-sizing: border-box;
-            box-shadow: 0 2px 6px 0 rgba(114, 124, 245, .5);
-        }
-        .amap_lib_placeSearch{
-        	border: none;
+        html,body,#container{
+            height:100%;
         }
         .info{
-        	width: 90%;
-        	position: relative;
-        	top: 0;
-        	right: 0;
-        	margin:1rem 5%;
-        }
-        .amap-geolocation-con .amap-geo{
-        	width: 25px;
-        	height: 25px;
+            width:26rem;
         }
     </style>
-</head>
 <body>
-<div id="container"></div>
+<div id='container'></div>
 <div class="info">
-    <h4 id='status'>正在为你定位</h4><hr>
-    <p id='result'></p>
+    <h4 id='status'></h4><hr>
+    <p id='result'></p><hr>
+    <p >由于众多浏览器已不再支持非安全域的定位请求，为保位成功率和精度，请升级您的站点到HTTPS。</p>
 </div>
-<div id="panel"></div>
-<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.10&key=acfe1836bc286b75f333692baa566003&&plugin=AMap.Scale,AMap.OverView,AMap.ToolBar"></script>
-<script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
 <script type="text/javascript">
-    //初始化地图对象，加载地图
-    var map = new AMap.Map("container", {
+  window._AMapSecurityConfig = {
+    securityJsCode: "9e81e142851348cd60d823d586494290",
+  };
+</script>
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=32107bd7528a12c4c1be063630e58033"></script>
+<script type="text/javascript">
+    var map = new AMap.Map('container', {
         resizeEnable: true
-    });
-    AMap.service(["AMap.PlaceSearch"], function() {
-        //构造地点查询类
     });
     AMap.plugin('AMap.Geolocation', function() {
         var geolocation = new AMap.Geolocation({
             enableHighAccuracy: true,//是否使用高精度定位，默认:true
             timeout: 10000,          //超过10秒后停止定位，默认：5s
             buttonPosition:'RB',    //定位按钮的停靠位置
-            buttonOffset: new AMap.Pixel(0, 0),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+            buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
             zoomToAccuracy: true,   //定位成功后是否自动调整地图视野到定位点
 
         });
@@ -78,8 +53,7 @@
     function onComplete(data) {
         document.getElementById('status').innerHTML='定位成功'
         var str = [];
-        console.log(data);
-        str.push('定位结果：' + data.formattedAddress);
+        str.push('定位结果：' + data.position);
         str.push('定位类别：' + data.location_type);
         if(data.accuracy){
              str.push('精度：' + data.accuracy + ' 米');
@@ -92,41 +66,6 @@
         document.getElementById('status').innerHTML='定位失败'
         document.getElementById('result').innerHTML = '失败原因排查信息:'+data.message;
     }
-    var toolBar = new AMap.ToolBar({
-        visible: true
-    });
-    var scale = new AMap.Scale({
-        visible: true
-    });
-    var marker = new AMap.Marker({
-	    icon: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
-	    position: [116.405467, 39.907761],
-	});
-    var placeSearch = new AMap.PlaceSearch({
-        type: '餐饮服务', // 兴趣点类别
-        pageSize: 5, // 单页显示结果条数
-        pageIndex: 1, // 页码
-        city: "全国", // 兴趣点城市
-        citylimit: false,  //是否强制限制在设置的城市内搜索
-        map: map, // 展现结果的地图实例
-        panel: "panel", // 结果列表将在此容器中进行展示。
-        autoFitView: false // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
-	});
-	map.addControl(scale);
-	map.addControl(toolBar);
-	map.add(marker);
-    function food_position(e){
-    	var food_position={};
-    	food_position.Lng=e.lnglat.getLng();
-    	food_position.Lat=e.lnglat.getLat();
-       	marker.setPosition([e.lnglat.getLng(), e.lnglat.getLat()]);
-    	map.setFitView();
-    	map.setZoom(16);
-        var cpoint = [food_position.Lng, food_position.Lat]; //中心点坐标
-        placeSearch.searchNearBy('', cpoint, 300, function(status, result) {
-        });
-    }
-    map.on('click', food_position);
 </script>
 </body>
 </html>
